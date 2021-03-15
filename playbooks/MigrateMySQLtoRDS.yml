@@ -1,5 +1,13 @@
 ---
   - hosts: all
+    vars:
+      source_db: "{{morpheus['customOptions']['sourceDB']}}"
+      source_user: "{{morpheus['customOptions']['sourceUser']}}"
+      source_pw: "{{morpheus['customOptions']['sourcePassword']}}"
+      target_user: "{{morpheus['customOptions']['targetUser']}}"
+      target_pw: "{{morpheus['customOptions']['targetPassword']}}"
+    become: true
+
     tasks:
       - name: Get Instance Details
         uri:
@@ -8,17 +16,9 @@
           url: "{{morpheus['morpheus']['applianceUrl']}}/api/instances/{{morpheus['customOptions']['target']}}"
           headers:
             Authorization: "BEARER {{ lookup('cypher','secret=secret/Bearer') }}"
+          validate_certs: no
         register: data
 
-  - hosts: all
-    vars:
-      source_db: "{{morpheus['customOptions']['sourceDB']}}"
-      source_user: "{{morpheus['customOptions']['sourceUser']}}"
-      source_pw: "{{morpheus['customOptions']['sourcePassword']}}"
-      target_user: "{{morpheus['customOptions']['targetUser']}}"
-      target_pw: "{{morpheus['customOptions']['targetPassword']}}"
-    become: true
-    tasks:
       - name: Install Python MySQL CentOS/RHEL
         yum:
           name: MySQL-python
@@ -27,7 +27,6 @@
         become_method: sudo
         when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
 
-    tasks:
       - name: Install Python MySQL Debian/Ubuntu
         yum:
           name: python-mysqldb
