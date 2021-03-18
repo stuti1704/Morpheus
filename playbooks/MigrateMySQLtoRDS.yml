@@ -13,7 +13,7 @@
         uri:
           method: GET
           body_format: json
-          url: "http://172.16.0.33/provisioning/instances/79"
+          url: "{{morpheus['morpheus']['applianceUrl']}}/api/instances/{{morpheus['customOptions']['target']}}"
           headers:
             Authorization: "BEARER {{ lookup('cypher','secret=secret/Bearer') }}"
           validate_certs: no
