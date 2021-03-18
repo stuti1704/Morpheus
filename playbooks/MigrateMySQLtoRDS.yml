@@ -30,7 +30,7 @@
       - name: Install Python MySQL Debian/Ubuntu
         yum:
           name: python-mysqldb
-          state: installed
+          state: present
         become: yes
         become_method: sudo
         when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
